@@ -16,7 +16,7 @@ import com.okhttp.app.request.listener.OnRequestCallBackListener;
 import com.okhttp.app.ui.neterror.NetWorkErrorView;
 
 
-public class MainActivity extends BaseActivity<ResultStateModel<FilmHotModel>> implements OnRequestCallBackListener<FilmHotModel> {
+public class MainActivity extends BaseActivity<ResultStateModel<FilmHotModel>> implements OnRequestCallBackListener<FilmHotModel>, NetWorkErrorView.OnFreshListener {
 
     private TextView mTextMessage;
     private NetWorkErrorView netWorkErrorView;
@@ -61,6 +61,7 @@ public class MainActivity extends BaseActivity<ResultStateModel<FilmHotModel>> i
         mTextMessage = (TextView) findViewById(R.id.message);
 
         netWorkErrorView = (NetWorkErrorView) findViewById(R.id.netWorkErrorView);
+        netWorkErrorView.setOnFreshListener(this);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -83,5 +84,13 @@ public class MainActivity extends BaseActivity<ResultStateModel<FilmHotModel>> i
     public void onRequestCallBackError() {
         mTextMessage.setText("请求失败");
 
+    }
+
+    @Override
+    public void onReFresh() {
+        mTextMessage.setVisibility(View.GONE);
+        netWorkErrorView.setVisibility(View.VISIBLE);
+        baseRequest = new BaseRequest(MainActivity.this, netWorkErrorView, MainActivity.this);
+        baseRequest.requestByLoadView("https://raw.githubusercontent.com/704266213/data/master/WebContent/data/filmlist1.txt");
     }
 }
