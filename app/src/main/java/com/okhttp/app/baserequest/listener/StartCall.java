@@ -1,8 +1,10 @@
-package com.okhttp.app.request.listener;
+package com.okhttp.app.baserequest.listener;
 
 /**
  * Created by shuhj on 2017/4/10.
  */
+
+import com.okhttp.app.request.listener.OnLoadDataStateListerner;
 
 import java.io.IOException;
 

@@ -80,14 +80,12 @@ public class RequestCallBack<T extends ResultStateModel<T>> implements Callback 
                     onRequestCallBackListener.onRequestCallBackError();
                 }
             }
-
         }
     }
 
     private Type getActualType() {
         Type type = null;
         if (onRequestCallBackListener != null) {
-            handler = new Handler(Looper.getMainLooper());
             ParameterizedType pt = (ParameterizedType) onRequestCallBackListener.getClass().getGenericSuperclass();
             type = pt.getActualTypeArguments()[0];
         }

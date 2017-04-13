@@ -11,12 +11,18 @@ import android.widget.TextView;
 import com.okhttp.app.dialog.LoadingDialog;
 import com.okhttp.app.model.FilmHotModel;
 import com.okhttp.app.model.ResultStateModel;
-import com.okhttp.app.request.BaseRequest;
+import com.okhttp.app.baserequest.BaseRequest;
+import com.okhttp.app.request.PostRequest;
+import com.okhttp.app.request.SendRequest;
+import com.okhttp.app.request.listener.OnBuildRequestBodyListener;
 import com.okhttp.app.request.listener.OnRequestCallBackListener;
 import com.okhttp.app.ui.neterror.NetWorkErrorView;
 
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
 
-public class MainActivity extends BaseActivity<ResultStateModel<FilmHotModel>> implements OnRequestCallBackListener<FilmHotModel>, NetWorkErrorView.OnFreshListener {
+
+public class MainActivity extends BaseActivity<ResultStateModel<FilmHotModel>> implements OnRequestCallBackListener<FilmHotModel>, NetWorkErrorView.OnFreshListener ,OnBuildRequestBodyListener{
 
     private TextView mTextMessage;
     private NetWorkErrorView netWorkErrorView;
@@ -90,7 +96,23 @@ public class MainActivity extends BaseActivity<ResultStateModel<FilmHotModel>> i
     public void onReFresh() {
         mTextMessage.setVisibility(View.GONE);
         netWorkErrorView.setVisibility(View.VISIBLE);
-        baseRequest = new BaseRequest(MainActivity.this, netWorkErrorView, MainActivity.this);
-        baseRequest.requestByLoadView("https://raw.githubusercontent.com/704266213/data/master/WebContent/data/filmlist1.txt");
+//        baseRequest = new BaseRequest(MainActivity.this, netWorkErrorView, MainActivity.this);
+//        baseRequest.requestByLoadView("https://raw.githubusercontent.com/704266213/data/master/WebContent/data/filmlist1.txt");
+
+        PostRequest postRequest = new PostRequest(this);
+        SendRequest sendRequest = new SendRequest(this,this,netWorkErrorView);
+        sendRequest.sendRequest(postRequest);
+    }
+
+    @Override
+    public String buildRequestUrl() {
+        return "https://raw.githubusercontent.com/704266213/data/master/WebContent/data/filmlist1.txt";
+    }
+
+    @Override
+    public RequestBody buildRequestBody() {
+        FormBody.Builder builder = new FormBody.Builder();
+        builder.add("name","jaty");
+        return builder.build();
     }
 }

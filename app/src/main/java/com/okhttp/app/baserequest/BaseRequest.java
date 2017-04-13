@@ -1,4 +1,4 @@
-package com.okhttp.app.request;
+package com.okhttp.app.baserequest;
 
 
 import android.content.Context;
@@ -9,12 +9,13 @@ import com.okhttp.app.interceptor.NetworkCacheInterceptor;
 import com.okhttp.app.request.listener.OnLoadDataStateListerner;
 import com.okhttp.app.request.listener.OnRequestCallBackListener;
 import com.okhttp.app.request.listener.RequestCallBack;
-import com.okhttp.app.request.listener.StartCall;
+import com.okhttp.app.baserequest.listener.StartCall;
 
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
 import okhttp3.CacheControl;
+import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -26,7 +27,6 @@ import okhttp3.Request;
  * 修改备注：
  */
 public class BaseRequest {
-
 
     private CacheControl cacheControl;
     private OkHttpClient client;
@@ -94,6 +94,11 @@ public class BaseRequest {
                 .build();
         Callback callBack = new RequestCallBack(onRequestCallBackListener, onLoadDataStateListerner);
         client.newCall(request).enqueue(callBack);
+    }
+
+    public void sendRequest(Call call) {
+        Callback callBack = new RequestCallBack(onRequestCallBackListener, onLoadDataStateListerner);
+        call.enqueue(callBack);
     }
 
 }
